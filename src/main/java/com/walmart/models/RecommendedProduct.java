@@ -1,7 +1,7 @@
 package com.models;
 
+import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONobject;
 
 
 class RecommendedProduct {

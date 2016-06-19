@@ -20,7 +20,11 @@ class RecommendationEngine {
 		logger.info(itemId);
 
 		JSONArray recommendedProducts = this.getRecommendedProducts(itemId);
-		logger.info(recommendedProducts.size());
+		
+		int size = 10<recommendedProducts.size()?10:recommendedProducts.size();
+
+		logger.info("Recommended product list size: " + size);
+
 		// sort recommended products
 
 		// return recommendedProducts;
@@ -30,7 +34,7 @@ class RecommendationEngine {
 		logger.info("In getItemId");
 		logger.info("Searching the product");
 		String url = URLUtils.getAPIURL("search", product);
-		logger.info("making serach request");
+		logger.info("Making serach request");
 		JSONObject jsonObject = URLUtils.getJSONResponse(url);
 		JSONArray items = (JSONArray)jsonObject.get("items");
 		JSONObject item = (JSONObject)items.get(0);
