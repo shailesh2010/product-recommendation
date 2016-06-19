@@ -12,5 +12,8 @@ class App {
 	public static void main(String[] args) {
 		BasicConfigurator.configure();
 		PropertyReader.initializeProperties();
+		System.out.println("Walmart Product Recommendation");
+		CommandManager commandManager = new CommandManager();
+		commandManager.startSystem();
 	}
 }
