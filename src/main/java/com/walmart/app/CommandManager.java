@@ -44,6 +44,7 @@ public class CommandManager {
 	}
 
 	void startSystem() {
+		RecommendationEngine re = new RecommendationEngine();
 		while(true) {
 			this.printMenu();
 			String userInput = this.getUserInput();
@@ -54,7 +55,7 @@ public class CommandManager {
 			else if(command == 1) {
 				System.out.println("Please input the product to search : ");
 				String userQuery = this.getUserInput();
-				System.out.println(userQuery);
+				re.getRecommendedProducts(userQuery);
 			}
 			else {
 				System.out.println("\n\tInvalid Option! Please try again.\n");

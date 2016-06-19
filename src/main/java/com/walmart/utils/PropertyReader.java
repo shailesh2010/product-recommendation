@@ -11,7 +11,10 @@ import org.apache.log4j.Logger;
 
 
 public class PropertyReader {
-	public static String URL;
+	public static String API_URL;
+	public static String SEARCH_ENDPOINT;
+	public static String RECOMMENDATION_ENDPOINT;
+	public static String REVIEW_ENDPOINT;
 	public static String API_KEY;
 	public static boolean DEBUG;
 
@@ -23,9 +26,12 @@ public class PropertyReader {
 		try {
 			propertiesFile = new FileInputStream("config.properties");
 			properties.load(propertiesFile);
-			URL =  properties.getProperty("URL");
-			API_KEY =  properties.getProperty("API_KEY");
 			DEBUG =  Boolean.parseBoolean(properties.getProperty("DEBUG"));
+			API_URL =  properties.getProperty("URL");
+			SEARCH_ENDPOINT =  properties.getProperty("SEARCH_ENDPOINT");
+			RECOMMENDATION_ENDPOINT =  properties.getProperty("RECOMMENDATION_ENDPOINT");
+			REVIEW_ENDPOINT =  properties.getProperty("REVIEW_ENDPOINT");
+			API_KEY =  properties.getProperty("API_KEY");
 			if (DEBUG) {
 				LogManager.getRootLogger().setLevel(Level.DEBUG);
 			}
