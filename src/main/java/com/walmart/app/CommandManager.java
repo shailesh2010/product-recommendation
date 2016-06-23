@@ -20,7 +20,7 @@ public class CommandManager {
     
     
     // Method to read command from command line 
-    String getUserInput(){
+    public String getUserInput(){
         String input = null;
         try{
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

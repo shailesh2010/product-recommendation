@@ -2,7 +2,6 @@ package com.walmart.models;
 
 
 import java.util.List;
-import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;

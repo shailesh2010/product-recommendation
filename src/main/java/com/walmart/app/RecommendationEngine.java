@@ -23,70 +23,69 @@ import com.walmart.models.RecommendedProduct;
 class RecommendationEngine {
 
     final static Logger logger = Logger.getLogger(RecommendationEngine.class);
-
+    final int concurrentAPIRequest = 5;
+    final int noOfProductRecommendation = 10;
 
     List<RecommendedProduct> getRecommendedProducts(String product) {
-        logger.info("In getRecommendedProducts");
-        long itemId = this.getFirstItemId(product);
-
-        logger.info(itemId);
-
-        JSONArray jsonArray = this.getRecommendedProducts(itemId);
         
-        if(jsonArray==null)
-            jsonArray = new JSONArray();
-
-        int size = 10<jsonArray.size()?10:jsonArray.size();
-
-        // logger.info("Recommended product list size: " + recommendedProducts.size());
-
-        // List<RecommendedProduct> recommendedProducts = Utils.getProductListFromJSONArray(recommendedProducts, 10);
-        // logger.info(selectedRecommendedProducts);
-
-
-        ExecutorService requestTaskExecutor = Executors.newFixedThreadPool(5);
-        CompletionService<RecommendedProduct> requestTaskCompletionService = 
-            new ExecutorCompletionService<RecommendedProduct>(requestTaskExecutor);
-
         List<RecommendedProduct> recommendedProducts = new ArrayList<RecommendedProduct>();
-        int taskCounter = 0;
-        for (taskCounter=0; taskCounter<size; taskCounter++) {
-            RecommendedProduct rp = new RecommendedProduct();
-            JSONObject jsonObject = (JSONObject) jsonArray.get(taskCounter);
-            rp.setItemId((Long)jsonObject.get("itemId"));
-            rp.setItemName((String)jsonObject.get("name"));
-            requestTaskCompletionService.submit(new RequestTask(rp));
-        }
+        logger.info("In getRecommendedProducts");
 
-        for(int completedTask=0; completedTask<taskCounter; completedTask++) {
-            try {
-                Future<RecommendedProduct> requestResult = requestTaskCompletionService.take();
-                RecommendedProduct rp = requestResult.get();
-                recommendedProducts.add(rp);
+        Long itemId = this.getFirstItemId(product);
+        if(itemId!=null) {
+            logger.info(itemId);
+            JSONArray jsonArray = this.getRecommendedProducts(itemId);
+            if(jsonArray==null)
+                jsonArray = new JSONArray();
+            int size = noOfProductRecommendation<jsonArray.size()?noOfProductRecommendation:jsonArray.size();
+
+            ExecutorService requestTaskExecutor = Executors.newFixedThreadPool(concurrentAPIRequest);
+            CompletionService<RecommendedProduct> requestTaskCompletionService = 
+                new ExecutorCompletionService<RecommendedProduct>(requestTaskExecutor);
+
+            int taskCounter = 0;
+            for (taskCounter=0; taskCounter<size; taskCounter++) {
+                RecommendedProduct rp = new RecommendedProduct();
+                JSONObject jsonObject = (JSONObject) jsonArray.get(taskCounter);
+                rp.setItemId((Long)jsonObject.get("itemId"));
+                rp.setItemName((String)jsonObject.get("name"));
+                requestTaskCompletionService.submit(new RequestTask(rp));
             }
-            catch(Exception e) {
-                logger.error("cause:"+e.getCause());
-                logger.error("Error in task completion: ",e);
+
+            for(int completedTask=0; completedTask<taskCounter; completedTask++) {
+                try {
+                    Future<RecommendedProduct> requestResult = requestTaskCompletionService.take();
+                    RecommendedProduct rp = requestResult.get();
+                    recommendedProducts.add(rp);
+                }
+                catch(Exception e) {
+                    logger.error("cause:"+e.getCause());
+                    logger.error("Error in task completion: ",e);
+                }
             }
+            logger.info("Before sorting:");
+            logger.info(recommendedProducts);
+            logger.info("After sorting:");
+            Collections.sort(recommendedProducts);
+            logger.info(recommendedProducts);
         }
-        logger.info("Before sorting:");
-        logger.info(recommendedProducts);
-        logger.info("After sorting:");
-        Collections.sort(recommendedProducts);
-        logger.info(recommendedProducts);
         return recommendedProducts;
     }
 
 
-    long getFirstItemId(String product) {
+    Long getFirstItemId(String product) {
         logger.info("In getItemId");
         logger.info("Searching the product");
         String url = URLUtils.getAPIURL("search", product);
         logger.info("Making serach request");
         JSONObject jsonObject = URLUtils.getJSONResponse(url);
-        JSONArray items = (JSONArray)jsonObject.get("items");
-        JSONObject item = (JSONObject)items.get(0);
-        Long itemId = (Long)item.get("itemId");
+        JSONArray items = null;
+        Long itemId = null;
+        if (jsonObject.get("items")!=null) {
+            items = (JSONArray)jsonObject.get("items");
+            JSONObject item = (JSONObject)items.get(0);
+            itemId = (Long)item.get("itemId");
+        }
         return itemId;
     }
 
@@ -97,7 +96,10 @@ class RecommendationEngine {
         String url = URLUtils.getAPIURL("nbp", ""+itemId);
         logger.info("Making recommendation request");
         JSONObject jsonObject = URLUtils.getJSONResponse(url);
-        JSONArray items = (JSONArray)jsonObject.get("items");
+        JSONArray items = null;
+        if (jsonObject.get("items")!=null) {
+            items = (JSONArray)jsonObject.get("items");
+        }
         return items;
     }
 }
