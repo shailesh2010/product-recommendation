@@ -23,7 +23,7 @@ public class RecommendedProduct implements Comparable<RecommendedProduct>{
         String[] keywords = keywordString.split(",");
         for (String review : reviewList) {
             for(int i=0; i<keywords.length; i++){
-                if(review.contains(keywords[i]))
+                if(review.contains(keywords[i].trim()))
                     count++;
             }
         }

@@ -33,7 +33,8 @@ class RecommendationEngine {
 
         JSONArray jsonArray = this.getRecommendedProducts(itemId);
         
-        logger.info(jsonArray.size());
+        if(jsonArray==null)
+            jsonArray = new JSONArray();
 
         int size = 10<jsonArray.size()?10:jsonArray.size();
 

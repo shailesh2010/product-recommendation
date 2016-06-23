@@ -58,6 +58,7 @@ public class CommandManager {
             else if(command == 1) {
                 System.out.print("Please input the product to search : ");
                 String userQuery = this.getUserInput();
+                System.out.println("Getting recommended products...");
                 List<RecommendedProduct> recommendedProducts = re.getRecommendedProducts(userQuery);
                 printResults(recommendedProducts);
             }
@@ -68,7 +69,7 @@ public class CommandManager {
     }
     void printResults(List<RecommendedProduct> recommendedProducts) {
         if(recommendedProducts.size() == 0) {
-            System.out.println("No recommended products found. Please try with different product!!");
+            System.out.println("\n**No recommended products found. Please try with different product!!\n");
             return;
         }
         System.out.println("------------------------------------------------------------------------");
