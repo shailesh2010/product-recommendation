@@ -9,7 +9,7 @@ Technologies Used:
 - Unit tests
 - Basic sentiment analysis method
 
-Because of time constraints I can not implement through test cases and Caching mechnism.
+Because of time constraints I can not implement through test cases and Caching mechanism.
 
 ###Setup###
 1. Install java from [this link](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
