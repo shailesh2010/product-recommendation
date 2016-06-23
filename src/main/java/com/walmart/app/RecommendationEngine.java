@@ -26,6 +26,8 @@ class RecommendationEngine {
     final int concurrentAPIRequest = 5;
     final int noOfProductRecommendation = 10;
 
+
+    // Method to get recommended products
     List<RecommendedProduct> getRecommendedProducts(String product) {
         
         List<RecommendedProduct> recommendedProducts = new ArrayList<RecommendedProduct>();
@@ -39,6 +41,7 @@ class RecommendationEngine {
                 jsonArray = new JSONArray();
             int size = noOfProductRecommendation<jsonArray.size()?noOfProductRecommendation:jsonArray.size();
 
+            // Code to make concurrent requests
             ExecutorService requestTaskExecutor = Executors.newFixedThreadPool(concurrentAPIRequest);
             CompletionService<RecommendedProduct> requestTaskCompletionService = 
                 new ExecutorCompletionService<RecommendedProduct>(requestTaskExecutor);
@@ -73,6 +76,7 @@ class RecommendationEngine {
     }
 
 
+    // method to get the item id from api
     Long getFirstItemId(String product) {
         logger.info("In getItemId");
         logger.info("Searching the product");
@@ -90,6 +94,7 @@ class RecommendationEngine {
     }
 
 
+    // method to get the recommended items from api
     JSONArray getRecommendedProducts(long itemId) {
         logger.info("In getRecommendedProducts");
         logger.info("Searching for the recommended products");

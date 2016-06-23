@@ -22,7 +22,8 @@ public class RequestTask implements Callable<RecommendedProduct>{
         this.rp = rp;
     }
 
-
+    // task to executed to get the reviews for the item
+    // concurrent execution supported
     public RecommendedProduct call() throws Exception{
         
         logger.info("Getting data for "+this.rp.getItemId());

@@ -17,6 +17,7 @@ public class RecommendedProduct implements Comparable<RecommendedProduct>{
     private int totalReviewCount;
     private List<String> reviewList;
 
+    // Method to conunt the keywords in review List
     public int getKeywordCount(String keywordString) {
         int count = 0;
         String[] keywords = keywordString.split(",");
@@ -33,6 +34,7 @@ public class RecommendedProduct implements Comparable<RecommendedProduct>{
         return("Item Number = "+this.getItemId()+" and  Item Name = "+this.getItemName());
     }
 
+    // Method to rank the products
     public int compareTo(RecommendedProduct rp) {
         float score1 = 0;
         float score2 = 0;

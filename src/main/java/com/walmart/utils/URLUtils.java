@@ -16,6 +16,7 @@ public class URLUtils {
 
     final static Logger logger = Logger.getLogger(URLUtils.class);
 
+    // method to get api url
     public static String getAPIURL(String resource, String searchParameter) {
         StringBuilder url = new StringBuilder(PropertyReader.API_URL);
         if (resource.equals("search")) {
@@ -43,6 +44,7 @@ public class URLUtils {
         return url.toString();
     }
 
+    // method to request the url and get json response
     public static JSONObject getJSONResponse(String url) {
         JSONObject jsonObject = new JSONObject();
         try {
