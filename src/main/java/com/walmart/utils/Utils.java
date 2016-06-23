@@ -17,11 +17,21 @@ public class Utils {
         for (int cnt=0; cnt<size; cnt++) {
             RecommendedProduct rp = new RecommendedProduct();
             JSONObject jsonObject = (JSONObject) jsonArray.get(cnt);
-            rp.itemId = (Long)jsonObject.get("itemId");
-            rp.itemName = (String)jsonObject.get("name");
+            rp.setItemId((Long)jsonObject.get("itemId"));
+            rp.setItemName((String)jsonObject.get("name"));
 
             productList.add(rp);
         }
         return productList;
+    }
+
+    public static List<String> getReviewListFromJSONArray(JSONArray jsonArray) {
+        List<String> reviewList = new ArrayList<String>();
+        for (int cnt=0; cnt<jsonArray.size(); cnt++) {
+            JSONObject jsonObject = (JSONObject) jsonArray.get(cnt);
+            String review = (String)jsonObject.get("reviewText");
+            reviewList.add(review.toLowerCase());
+        }
+        return reviewList;
     }
 }

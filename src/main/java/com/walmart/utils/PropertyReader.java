@@ -17,6 +17,8 @@ public class PropertyReader {
 	public static String REVIEW_ENDPOINT;
 	public static String API_KEY;
 	public static boolean DEBUG;
+	public static String POSITIVE_KEYWORDS;
+	public static String NEGATIVE_KEYWORDS;
 
 	final static Logger logger = Logger.getLogger(PropertyReader.class);
 
@@ -32,6 +34,8 @@ public class PropertyReader {
 			RECOMMENDATION_ENDPOINT =  properties.getProperty("RECOMMENDATION_ENDPOINT");
 			REVIEW_ENDPOINT =  properties.getProperty("REVIEW_ENDPOINT");
 			API_KEY =  properties.getProperty("API_KEY");
+			POSITIVE_KEYWORDS =  properties.getProperty("POSITIVE_KEYWORDS");
+			NEGATIVE_KEYWORDS =  properties.getProperty("NEGATIVE_KEYWORDS");
 			if (DEBUG) {
 				LogManager.getRootLogger().setLevel(Level.DEBUG);
 			}

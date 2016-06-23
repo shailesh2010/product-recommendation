@@ -2,65 +2,84 @@ package com.walmart.app;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.ArrayList;
 
+import com.walmart.models.RecommendedProduct;
+
 public class CommandManager {
-	
-	// Method to print the main menu	
-	void printMenu(){
-		System.out.println("\n\nWalmart Product Recommendation");
-		System.out.println("\nMenu\n");
-		System.out.println("1. Query about the product");
-		System.out.println("2. Quit");
-		System.out.print("Please select an option(enter a number) : ");
-	}
-	
-	
-	// Method to read command from command line	
-	String getUserInput(){
-		String input = null;
-		try{
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			input = br.readLine();
-		}
-		catch(Exception e){
-			System.out.println("Something went wrong with the system input!!   Please try again.");
-		}
-		return input;
-	}
+    
+    // Method to print the main menu    
+    void printMenu(){
+        System.out.println("\n\nWalmart Product Recommendation");
+        System.out.println("\nMenu\n");
+        System.out.println("1. Query about the product");
+        System.out.println("2. Quit");
+        System.out.print("Please select an option(enter a number) : ");
+    }
+    
+    
+    // Method to read command from command line 
+    String getUserInput(){
+        String input = null;
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            input = br.readLine();
+        }
+        catch(Exception e){
+            System.out.println("Something went wrong with the system input!!   Please try again.");
+        }
+        return input;
+    }
 
-	public int parseCommand(String strCommand) {
-		int command = -1;
-		if (strCommand == null || strCommand.length() == 0) {
-			return command;
-		}
-		try {
-			command = Integer.parseInt(strCommand);
-		}
-		catch (NumberFormatException nfe) {
-			command = 0;
-		}
-		return command;
-	}
+    public int parseCommand(String strCommand) {
+        int command = -1;
+        if (strCommand == null || strCommand.length() == 0) {
+            return command;
+        }
+        try {
+            command = Integer.parseInt(strCommand);
+        }
+        catch (NumberFormatException nfe) {
+            command = 0;
+        }
+        return command;
+    }
 
-	void startSystem() {
-		RecommendationEngine re = new RecommendationEngine();
-		while(true) {
-			this.printMenu();
-			String userInput = this.getUserInput();
-			int command = this.parseCommand(userInput);
-			if (command == 2) {
-				System.exit(0);
-			}
-			else if(command == 1) {
-				System.out.println("Please input the product to search : ");
-				String userQuery = this.getUserInput();
-				re.getRecommendedProducts(userQuery);
-			}
-			else {
-				System.out.println("\n\tInvalid Option! Please try again.\n");
-			}
-		}
-	}
-
+    void startSystem() {
+        RecommendationEngine re = new RecommendationEngine();
+        while(true) {
+            this.printMenu();
+            String userInput = this.getUserInput();
+            int command = this.parseCommand(userInput);
+            if (command == 2) {
+                System.exit(0);
+            }
+            else if(command == 1) {
+                System.out.print("Please input the product to search : ");
+                String userQuery = this.getUserInput();
+                List<RecommendedProduct> recommendedProducts = re.getRecommendedProducts(userQuery);
+                printResults(recommendedProducts);
+            }
+            else {
+                System.out.println("\n\tInvalid Option! Please try again.\n");
+            }
+        }
+    }
+    void printResults(List<RecommendedProduct> recommendedProducts) {
+        if(recommendedProducts.size() == 0) {
+            System.out.println("No recommended products found. Please try with different product!!");
+            return;
+        }
+        System.out.println("------------------------------------------------------------------------");
+        System.out.println(" R e c o m m e n d e d   P r o d u c t s ");
+        System.out.println("------------------------------------------------------------------------");
+        System.out.format("No.  %-10s\t%-100s\n","Item ID", "Item Name");
+        System.out.println("------------------------------------------------------------------------");
+        int cnt = 1;
+        for(RecommendedProduct rp: recommendedProducts) {
+            System.out.format("%3d%10d\t%-100s\n",cnt++,rp.getItemId(), rp.getItemName());
+        }
+        System.out.println("------------------------------------------------------------------------");
+    }
 }

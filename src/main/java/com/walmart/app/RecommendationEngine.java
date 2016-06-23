@@ -2,6 +2,7 @@ package com.walmart.app;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.CompletionService;
@@ -24,7 +25,7 @@ class RecommendationEngine {
     final static Logger logger = Logger.getLogger(RecommendationEngine.class);
 
 
-    void getRecommendedProducts(String product) {
+    List<RecommendedProduct> getRecommendedProducts(String product) {
         logger.info("In getRecommendedProducts");
         long itemId = this.getFirstItemId(product);
 
@@ -51,8 +52,8 @@ class RecommendationEngine {
         for (taskCounter=0; taskCounter<size; taskCounter++) {
             RecommendedProduct rp = new RecommendedProduct();
             JSONObject jsonObject = (JSONObject) jsonArray.get(taskCounter);
-            rp.itemId = (Long)jsonObject.get("itemId");
-            rp.itemName = (String)jsonObject.get("name");
+            rp.setItemId((Long)jsonObject.get("itemId"));
+            rp.setItemName((String)jsonObject.get("name"));
             requestTaskCompletionService.submit(new RequestTask(rp));
         }
 
@@ -63,14 +64,16 @@ class RecommendationEngine {
                 recommendedProducts.add(rp);
             }
             catch(Exception e) {
+                logger.error("cause:"+e.getCause());
                 logger.error("Error in task completion: ",e);
             }
         }
+        logger.info("Before sorting:");
         logger.info(recommendedProducts);
-
-        // sort recommended products
-
-        // return recommendedProducts;
+        logger.info("After sorting:");
+        Collections.sort(recommendedProducts);
+        logger.info(recommendedProducts);
+        return recommendedProducts;
     }
 
 
